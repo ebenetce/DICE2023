@@ -4,6 +4,6 @@ This is a first iteration at implementing the DICE 2023 ([Barrage and Nordhaus](
 
 These files replicate DICE-2023 in MATLAB. You can open and run them directly using MATLAB Online throught the link below:
 
-[![Open in MATLAB Online](https://www.mathworks.com/images/responsive/global/open-in-matlab-online.svg)](https://matlab.mathworks.com/open/github/v1?repo=ebenetce/DICE2023&project=DICE2023.prj)
+[![Open in MATLAB Online](https://www.mathworks.com/images/responsive/global/open-in-matlab-online.svg)](https://matlab.mathworks.com/open/github/v1?repo=ebenetce/DICE2023&project=DICE2023.prj&file=Main.mlx)
 
 For any questions contact: ebenetce@mathworks.com
