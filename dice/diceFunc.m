@@ -49,37 +49,11 @@ tau3 = params.tau3;
 
 gama = params.gama;
 
-%% Check eqs
-np = length(MIU);
-
+% Define equations
 C = zeros(np,1);
 for i = 1 : np
     if i == 1
-        RES0 = params.res00;
-        RES1 = params.res10;
-        RES2 = params.res20;
-        RES3 = params.res30;
-
-        TBOX1 = params.tbox10;
-        TBOX2 = params.tbox20;
-
-        CCATOT = params.CumEmiss0;
-
-        F_GHGabate = params.F_GHGabate2020;
-
-        K = params.k0;
-
-        TATM = params.tatm0;
-
-        DAMFRAC = a1*TATM+a2base*TATM.^a3;
-
-        YGROSS = eco2Param(1)*(K^gama);
-        YNET = YGROSS*(1-DAMFRAC);
-        ABATECOST = YGROSS*cost1tot(1)*(MIU(1)^expcost2);
-        Y = YNET - ABATECOST;
-        I = S(1)*Y;
-        C(1,1) = Y - I;
-
+        [RES0, RES1, RES2, RES3, TBOX1, TBOX2, CCATOT, F_GHGabate, K, I, C(1,1)] = getInitialState(params, S(1), MIU(1));
         alpha(1) = params.a0;
 
     else
