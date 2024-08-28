@@ -23,8 +23,8 @@ for i = 1 : np
     else
         [C(i,1), CCATOT, K, I, F_GHGabate, RES0, RES1, RES2, RES3, TBOX1, TBOX2] = diceForward(i, params, MIU, S, alpha, CCATOT, K, I, F_GHGabate, RES0, RES1, RES2, RES3, TBOX1, TBOX2);
     end
-
-    PERIODU = ((C*1000./L).^(1-elasmu)-1)./(1-elasmu)-1;
-    TOTPERIODU = PERIODU.*L.*RR;
-    UTILITY = tstep * scale1 * sum( TOTPERIODU ) + scale2;
 end
+
+PERIODU = ((C*1000./L).^(1-elasmu)-1)./(1-elasmu)-1;
+TOTPERIODU = PERIODU.*L.*RR;
+UTILITY = tstep * scale1 * sum( TOTPERIODU ) + scale2;
