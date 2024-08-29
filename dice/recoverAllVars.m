@@ -137,8 +137,6 @@ RSHORT(2:end) = -log(RFACTLONG(2:end)./RFACTLONG(1:end-1))/5;     % Short-run in
 FORC =  fco22x*log(MAT/mateq)/log(2)+F_Misc+F_GHGabate;   % Radiative forcing equation
 ECO2 = (sigma.*(eco2Param.*(K.^gama)) + eland).*(1-MIU);  % CO2 Emissions equation
 FORC_CO2 = fco22x*(log((MAT/mateq))/log(2));
-% SCC = -1000*ECO2./(.00001+C); SCC(1) = SCC(2)*0.85;
-% -1000*eco2eq.m(t)/(.00001+cc.m(t));
 PERIODU = ((C*1000./L).^(1-elasmu)-1)/(1-elasmu)-1; % Instantaneous utility function equation
 TOTPERIODU  = PERIODU.*L.* RR;                      % Period utility
 
@@ -151,16 +149,16 @@ for i = 2 : np
     params2 = params;
     params2.eland(i) = params2.eland(i)+0.1;
 
-    [~,C1,K1] = diceTrajectory(params2, np, MIU, S, alpha);
+    [~,Cd,Kd] = diceTrajectory(params2, np, MIU, S, alpha);
 
-    PERIODU1 = ((C1*1000./params2.L).^(1-elasmu)-1)/(1-elasmu)-1; % Instantaneous utility function equation
-    TOTPERIODU1  = PERIODU1.*params2.L.* params2.RR;                      % Period utility
+    PERIODUd = ((Cd*1000./params2.L).^(1-elasmu)-1)/(1-elasmu)-1; % Instantaneous utility function equation
+    TOTPERIODUd  = PERIODUd.*params2.L.* params2.RR;                      % Period utility
 
-    W1 = sum(TOTPERIODU1);
+    W1 = sum(TOTPERIODUd);
 
-    YGROSS1 = (aL(i)*(L(i)/1000)^(1-gama))*(K1(i)^gama);
-    ECO21 = (sigma(i)*YGROSS1 + params2.eland(i))*(1-(MIU(i)));
-    SCC(i) = -(W1-W0)/(ECO21 - ECO2(i))/dWdC(i);
+    YGROSSd = (aL(i)*(L(i)/1000)^(1-gama))*(Kd(i)^gama);
+    ECO2d = (sigma(i)*YGROSSd + params2.eland(i))*(1-(MIU(i)));
+    SCC(i) = -(W1-W0)/(ECO2d - ECO2(i))/dWdC(i);
 end
 SCC(1) = SCC(2)*0.85;
 
