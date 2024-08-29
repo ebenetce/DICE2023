@@ -143,21 +143,26 @@ PERIODU = ((C*1000./L).^(1-elasmu)-1)/(1-elasmu)-1; % Instantaneous utility func
 TOTPERIODU  = PERIODU.*L.* RR;                      % Period utility
 
 SCC = zeros(np,1);
-% W0 = sum(TOTPERIODU);
-% 
-% dWdC = cumsum((1000*C./L).^(-elasmu).*RR);
-% 
-% for i = 1 : 81
-%     params2 = LoadParams(i);
-%     params2.sigma(i) = params2.sigma(i)+1;
-% 
-%     [~,C1] = diceTrajectory(params2, i, MIU, S, alpha);
-%     PERIODU1 = ((C1*1000./params2.L).^(1-elasmu)-1)/(1-elasmu)-1; % Instantaneous utility function equation
-%     TOTPERIODU1  = PERIODU1.*params2.L.* params2.RR;                      % Period utility
-% 
-%     W1 = sum(TOTPERIODU1);
-%     SCC(i) = (W1-W0)/dWdC(i);
-% end
+W0 = sum(TOTPERIODU);
+
+dWdC = (1000*C./L).^(-elasmu).*RR;
+
+for i = 2 : np
+    params2 = params;
+    params2.eland(i) = params2.eland(i)+0.1;
+
+    [~,C1,K1] = diceTrajectory(params2, np, MIU, S, alpha);
+
+    PERIODU1 = ((C1*1000./params2.L).^(1-elasmu)-1)/(1-elasmu)-1; % Instantaneous utility function equation
+    TOTPERIODU1  = PERIODU1.*params2.L.* params2.RR;                      % Period utility
+
+    W1 = sum(TOTPERIODU1);
+
+    YGROSS1 = (aL(i)*(L(i)/1000)^(1-gama))*(K1(i)^gama);
+    ECO21 = (sigma(i)*YGROSS1 + params2.eland(i))*(1-(MIU(i)));
+    SCC(i) = -(W1-W0)/(ECO21 - ECO2(i))/dWdC(i);
+end
+SCC(1) = SCC(2)*0.85;
 
 ABATERAT = ABATECOST./Y;
 

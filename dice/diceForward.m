@@ -67,5 +67,5 @@ YNET = YGROSS*(1-DAMFRAC);
 Y = YNET - ABATECOST;
 I = S(i)*Y;
 
-C = Y - I;    
+C = Y - I;
 end
