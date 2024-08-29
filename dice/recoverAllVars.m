@@ -137,10 +137,27 @@ RSHORT(2:end) = -log(RFACTLONG(2:end)./RFACTLONG(1:end-1))/5;     % Short-run in
 FORC =  fco22x*log(MAT/mateq)/log(2)+F_Misc+F_GHGabate;   % Radiative forcing equation
 ECO2 = (sigma.*(eco2Param.*(K.^gama)) + eland).*(1-MIU);  % CO2 Emissions equation
 FORC_CO2 = fco22x*(log((MAT/mateq))/log(2));
-SCC = -1000*ECO2./(.00001+C); SCC(1) = SCC(2)*0.85;
+% SCC = -1000*ECO2./(.00001+C); SCC(1) = SCC(2)*0.85;
 % -1000*eco2eq.m(t)/(.00001+cc.m(t));
 PERIODU = ((C*1000./L).^(1-elasmu)-1)/(1-elasmu)-1; % Instantaneous utility function equation
 TOTPERIODU  = PERIODU.*L.* RR;                      % Period utility
+
+SCC = zeros(np,1);
+% W0 = sum(TOTPERIODU);
+% 
+% dWdC = cumsum((1000*C./L).^(-elasmu).*RR);
+% 
+% for i = 1 : 81
+%     params2 = LoadParams(i);
+%     params2.sigma(i) = params2.sigma(i)+1;
+% 
+%     [~,C1] = diceTrajectory(params2, i, MIU, S, alpha);
+%     PERIODU1 = ((C1*1000./params2.L).^(1-elasmu)-1)/(1-elasmu)-1; % Instantaneous utility function equation
+%     TOTPERIODU1  = PERIODU1.*params2.L.* params2.RR;                      % Period utility
+% 
+%     W1 = sum(TOTPERIODU1);
+%     SCC(i) = (W1-W0)/dWdC(i);
+% end
 
 ABATERAT = ABATECOST./Y;
 

@@ -21,7 +21,7 @@ tau1 = params.tau1;
 tau2 = params.tau2;
 tau3 = params.tau3;
 
-gama = params.gama;
+% gama = params.gama;
 %% Check eqs
 np = length(MIU);
 
