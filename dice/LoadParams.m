@@ -14,14 +14,14 @@ delA    = 0.0015; % Decline rate of TFP per 5 yearst
 
 gsigma1   = -0.015; % Initial growth of sigma (per year)
 delgsig   =  0.96;  % Decline rate of gsigma per period
-asymgsig  = -0.005; % Asympototic gsigma
+asymgsig  = -0.005; % Asymptotic gsigma
 e1        = 37.56;  % Industrial emissions 2020 (GtCO2 per year)
 miu1      =  0.05;  % Emissions control rate historical 2020
 fosslim   =  6000;  % Maximum cumulative extraction fossil fuels (GtC)
 CumEmiss0 =  633.5; % Cumulative emissions 2020 (GtC)
 % Climate damage parameters
 
-a1     = 0;        % Damage intercepte
+a1     = 0;        % Damage intercept
 a2base = 0.003467; % Damage quadratic term rev 01-13-23
 a3     = 2.00;     % Damage exponent
 % Abatement cost
