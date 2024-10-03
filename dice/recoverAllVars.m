@@ -1,9 +1,10 @@
 function allVars = recoverAllVars(sol, params)
-np = numel(sol)/3;
 
-MIU = sol(1:np);
-S = sol(np+1:2*np);
-alpha = sol(2*np+1:3*np);
+MIU = sol.MIU;
+S = sol.S;
+alpha = sol.alpha;
+
+np = numel(MIU);
 
 % Unpack params
 sigma = params.sigma;
