@@ -116,7 +116,9 @@ arguments
 
     % Variable Bounds 
     params.SLower (1,1) double = 0;
-    params.SUpper (1,1) double = 0.28;
+    params.SUpper (1,1) double = Inf;
+    params.FixSperiod (1,1) double = 38;
+    params.FixSvalue (1,1) double = 0.28;
     params.AlphaUpperBound (1,1) double = 100;
     params.AlphaLowerBound (1,1) double = 0.1;
 end
@@ -210,11 +212,13 @@ miuup(idx > 37) = params.limmiu2200;
 miuup(idx > 57) = params.limmiu2300;
 
 %% Capital Limits
-% sLBounds = zeros(np,1);
 sLBounds = params.SLower*ones(np,1);
-sLBounds(38:end) = 0.28;
-sUBounds = inf(np,1);
-sUBounds(38:end) = 0.28;
+sUBounds = params.SUpper*ones(np,1);
+
+if ~isinf(params.FixSperiod) && params.FixSperiod <= np
+    sLBounds(params.FixSperiod:end) = params.FixSvalue;
+    sUBounds(params.FixSperiod:end) = params.FixSvalue;
+end
 
 %% Collect parameters
 params.L = L;
