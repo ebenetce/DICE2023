@@ -1,6 +1,5 @@
 function plan = buildfile
 import matlab.buildtool.tasks.CodeIssuesTask
-import matlab.buildtool.tasks.TestTask
 
 % Create a plan from task functions
 plan = buildplan(localfunctions);
@@ -12,7 +11,7 @@ plan("check") = CodeIssuesTask(WarningThreshold=0);
 plan.DefaultTasks = "archive";
 
 % Make the "archive" task dependent on the "check" and "test" tasks
-plan("archive").Dependencies = ["check"];
+plan("archive").Dependencies = "check";
 end
 
 function archiveTask(~, version)
