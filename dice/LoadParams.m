@@ -115,12 +115,13 @@ arguments
     params.tatm0  (1,1) double = 1.24715;  % Initial atmospheric temperature change in 2020
 
     % Variable Bounds 
-    params.SLower (1,1) double = 0;
-    params.SUpper (1,1) double = Inf;
+    params.SLower double = 0;
+    params.SUpper double = Inf;
     params.FixSperiod (1,1) double = 38;
     params.FixSvalue (1,1) double = 0.28;
-    params.AlphaUpperBound (1,1) double = 100;
-    params.AlphaLowerBound (1,1) double = 0.1;
+    params.AlphaUpperBound double = 100;
+    params.AlphaLowerBound double = 0.1;
+    params.MIULowerBound double = 0
 end
 
 %% Derived PARAMETERS
@@ -237,6 +238,7 @@ params.sUBounds = sUBounds;
 params.eco2Param = aL.*(L/1000).^(1-params.gama);
 params.pbacktime = PBACKTIME;
 params.optlrsav = optlrsav;
+params.cpricebase = cpricebase;
 
 %% Solve for Alpha0
 proba0 = eqnproblem();

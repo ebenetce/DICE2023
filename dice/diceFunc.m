@@ -8,15 +8,13 @@ arguments
     nvp.Alpha (:,1) double = [];
     nvp.TempUpperConstraint (1,1) double = 20;
     nvp.TempLowerConstraint (1,1) double = 0.5;
-    nvp.AlphaLowerBound (1,1) double = 0.1;
-    nvp.AlphaUpperBound (1,1) double = 100;
 end
 
 %% VARIABLES
 % Control variables
 % Emission control rate GHGs
 if isempty (nvp.MIU)
-    MIU = optimvar('MIU',np, 'LowerBound', 0, 'UpperBound', params.miuup(1:np)); % Emission control rate GHGs
+    MIU = optimvar('MIU',np, 'LowerBound', params.MIULowerBound, 'UpperBound', params.miuup(1:np)); % Emission control rate GHGs
 else
     MIU = nvp.MIU;
 end
