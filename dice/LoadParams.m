@@ -115,7 +115,10 @@ arguments
     params.tatm0  (1,1) double = 1.24715;  % Initial atmospheric temperature change in 2020
 
     % Variable Bounds 
-    params.SLower = 0;
+    params.SLower (1,1) double = 0;
+    params.SUpper (1,1) double = 0.28;
+    params.AlphaUpperBound (1,1) double = 100;
+    params.AlphaLowerBound (1,1) double = 0.1;
 end
 
 %% Derived PARAMETERS

@@ -83,6 +83,9 @@ ABATECOST(1) = YGROSS(1)*cost1tot(1)*(MIU(1)^expcost2);
 Y(1) = YNET(1) - ABATECOST(1);
 I(1) = S(1)*Y(1);
 
+C = zeros(np,1);
+C(1,1) = Y(1) - I(1);
+
 for i = 2 : np
     CCATOT(i) = CCATOT(i-1) + ((sigma(i-1)*(eco2Param(i-1)*(K(i-1)^gama)) + eland(i-1))*(1-MIU(i-1)))*5/3.666;
 
@@ -125,7 +128,7 @@ Y = YNET - ABATECOST;                                 % Output net equation
 I = S.*Y;                                         % Savings rate equation
 C = Y - I;                                            % Consumption equation
 CPC =  1000*C./L;                                     % Per capita consumption definition
-MCABATE = pbacktime.*(MIU.^(expcost2-1));         % Equation for MC abatement
+% MCABATE = pbacktime.*(MIU.^(expcost2-1));         % Equation for MC abatement
 CPRICE  = pbacktime.*(MIU.^(expcost2-1));         % Carbon price equation from abatement
 
 RFACTLONG = SRF.*ones(np,1);
