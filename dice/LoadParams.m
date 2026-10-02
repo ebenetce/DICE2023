@@ -1,7 +1,7 @@
 function params = LoadParams(np, params)
 % LOADPARAMS Load Dice parameters. The function accepts the number of
-% periods (in increments of 5 years) and it allows overriding any of the
-% parameters.
+% periods and it allows overriding any of the parameters, including the
+% number of years in each period.
 %
 % params = LoadParams(81, a2base = .01);
 
@@ -58,7 +58,7 @@ arguments
     params.siggc1    (1,1) double = 0.01;  %  Annual standard deviation of consumption growth    
 
     % Scaling so that MU(C(1)) = 1 and objective function = PV consumption
-    params.tstep  (1,1) double = 5;           % Years per Period
+    params.tstep  (1,1) double {mustBePositive, mustBeFinite} = 5; % Years per Period
     params.SRF    (1,1) double = 1000000;    % Scaling factor discounting
     params.scale1 (1,1) double = 0.00891061; % Multiplicative scaling coefficient
     params.scale2 (1,1) double = -6275.91;   % Additive scaling coefficient
@@ -117,7 +117,7 @@ arguments
     % Variable Bounds 
     params.SLower double = 0;
     params.SUpper double = Inf;
-    params.FixSperiod (1,1) double = 38;
+    params.FixSperiod (1,1) double = 38; % Period in the 5-year reference calibration
     params.FixSvalue (1,1) double = 0.28;
     params.AlphaUpperBound double = 100;
     params.AlphaLowerBound double = 0.1;
@@ -127,6 +127,9 @@ end
 %% Derived PARAMETERS
 params.rartp = exp( params.prstp + params.betaclim*params.pi)-1;  % Risk-adjusted rate of time preference exp(rho*(T=0))-1
 params.sig1  = params.e1/(params.q1*(1-params.miu1));             % Carbon intensity 2020 kgCO2-output 2020
+referenceTstep = 5; % Years per period in the DICE-2023 calibration
+modelYears = params.yr0 + (0:np-1)'*params.tstep;
+elapsedYears = modelYears - params.yr0;
 
 L = params.pop1*ones(np, 1);      % Level of population and labor
 aL = params.AL1*ones(np, 1);      % Level of total factor productivity
@@ -163,62 +166,65 @@ emissrat       = zeros(np, 1); % Ratio of CO2e to industrial emissions
 optlrsav        =(params.dk + .004)/(params.dk + .004*params.elasmu + params.rartp)*params.gama;
 for t = 1:np
     % Precautionary dynamic parameters
-    varpcc(t)     =  min(params.siggc1^2*5*(t-1),params.siggc1^2*5*47);
+    varpcc(t)     =  min(params.siggc1^2*elapsedYears(t),params.siggc1^2*referenceTstep*47);
     rprecaut(t)   = -0.5*varpcc(t)*params.elasmu^2;
     RR1(t)        = 1/((1+params.rartp)^(params.tstep*(t-1)));
     RR(t)         = RR1(t)*(1+rprecaut(t))^(-params.tstep*(t-1));
 
     % Time preference for climate investments and precautionary effect
-    gA(t)         = params.gA1*exp(-params.delA*5*(t-1));
-    cpricebase(t) = params.cprice1*(1+params.gcprice)^(5*(t-1));
-    if t <= 7
-        PBACKTIME(t) = params.pback2050*exp(-0.05*(t-7));
+    gA(t)         = params.gA1*exp(-params.delA*elapsedYears(t));
+    cpricebase(t) = params.cprice1*(1+params.gcprice)^elapsedYears(t);
+    if modelYears(t) <= 2050
+        PBACKTIME(t) = params.pback2050*exp(-0.01*(modelYears(t)-2050));
     else
-        PBACKTIME(t) = params.pback2050*exp(-0.005*(t-7));
+        PBACKTIME(t) = params.pback2050*exp(-0.001*(modelYears(t)-2050));
     end
-    gsig(t)       = min(params.gsigma1*params.delgsig^(t-1),params.asymgsig);
+    gsig(t) = min(params.gsigma1*params.delgsig^(elapsedYears(t)/referenceTstep), ...
+        params.asymgsig);
     if t < np
-        L(t+1)          = L(t)*(params.popasym/L(t))^params.popadj;
+        L(t+1)          = L(t)*(params.popasym/L(t))^(params.popadj*params.tstep/referenceTstep);
         aL(t+1)         = aL(t)/(1-gA(t));
-        sigma(t+1)      = sigma(t)*exp(5*gsig(t));
+        sigma(t+1)      = sigma(t)*exp(params.tstep*gsig(t));
     end
 
     % Parameters emissions and non-CO2
-    eland(t)          = params.eland0*(1-params.deland)^(t-1);
-    if t <= 16
-        CO2E_GHGabateB(t) = params.ECO2eGHGB2020+((params.ECO2eGHGB2100-params.ECO2eGHGB2020)/16)*(t-1);
-        F_Misc(t)         = params.F_Misc2020 +((params.F_Misc2100-params.F_Misc2020)/16)*(t-1);
-        emissrat(t) = params.emissrat2020 +((params.emissrat2100-params.emissrat2020)/16)*(t-1);
-    else
-        CO2E_GHGabateB(t) = params.ECO2eGHGB2100;
-        F_Misc(t)         = params.F_Misc2100;
-        emissrat(t)       = params.emissrat2100;
-    end
+    eland(t) = params.eland0*(1-params.deland)^(elapsedYears(t)/referenceTstep);
+    interpolationFraction = min(elapsedYears(t)/(2100-params.yr0), 1);
+    CO2E_GHGabateB(t) = params.ECO2eGHGB2020 + ...
+        (params.ECO2eGHGB2100-params.ECO2eGHGB2020)*interpolationFraction;
+    F_Misc(t) = params.F_Misc2020 + ...
+        (params.F_Misc2100-params.F_Misc2020)*interpolationFraction;
+    emissrat(t) = params.emissrat2020 + ...
+        (params.emissrat2100-params.emissrat2020)*interpolationFraction;
     sigmatot(t) = sigma(t)*emissrat(t);
     cost1tot(t) = PBACKTIME(t)*sigmatot(t)/params.expcost2/1000;
 end
 
 %% Emissions limits
 % Upper bound on miu
-miuup = zeros(np,1);
-miuup(1) = 0.05;
-miuup(2) = 0.10;
-
-idx = 1:np;
-miuup(idx > 2)  = params.delmiumax*(idx(3:end)-1);
-miuup(idx > 8)  = 0.85+.05*(idx(9:end)-8);
-miuup(idx > 11) = params.limmiu2070;
-miuup(idx > 20) = params.limmiu2120;
-miuup(idx > 37) = params.limmiu2200;
-miuup(idx > 57) = params.limmiu2300;
+referencePeriods = (1:81)';
+referenceMiuup = zeros(81,1);
+referenceMiuup(1) = 0.05;
+referenceMiuup(2) = 0.10;
+referenceMiuup(referencePeriods > 2) = params.delmiumax*(referencePeriods(referencePeriods > 2)-1);
+referenceMiuup(referencePeriods > 8) = 0.85 + 0.05*(referencePeriods(referencePeriods > 8)-8);
+referenceMiuup(referencePeriods > 11) = params.limmiu2070;
+referenceMiuup(referencePeriods > 20) = params.limmiu2120;
+referenceMiuup(referencePeriods > 37) = params.limmiu2200;
+referenceMiuup(referencePeriods > 57) = params.limmiu2300;
+referenceYears = params.yr0 + (referencePeriods-1)*referenceTstep;
+miuup = interp1(referenceYears, referenceMiuup, modelYears, 'linear', 'extrap');
+miuup(modelYears > referenceYears(end)) = referenceMiuup(end);
 
 %% Capital Limits
 sLBounds = params.SLower*ones(np,1);
 sUBounds = params.SUpper*ones(np,1);
 
-if ~isinf(params.FixSperiod) && params.FixSperiod <= np
-    sLBounds(params.FixSperiod:end) = params.FixSvalue;
-    sUBounds(params.FixSperiod:end) = params.FixSvalue;
+if ~isinf(params.FixSperiod)
+    fixSYear = params.yr0 + (params.FixSperiod-1)*referenceTstep;
+    fixedSavingsPeriods = modelYears >= fixSYear;
+    sLBounds(fixedSavingsPeriods) = params.FixSvalue;
+    sUBounds(fixedSavingsPeriods) = params.FixSvalue;
 end
 
 %% Collect parameters
@@ -239,6 +245,9 @@ params.eco2Param = aL.*(L/1000).^(1-params.gama);
 params.pbacktime = PBACKTIME;
 params.optlrsav = optlrsav;
 params.cpricebase = cpricebase;
+forcingRetention = params.Fcoef2^(params.tstep/referenceTstep);
+params.Fcoef1 = params.Fcoef1*(1-forcingRetention)/(1-params.Fcoef2);
+params.Fcoef2 = forcingRetention;
 
 %% Solve for Alpha0
 proba0 = eqnproblem();

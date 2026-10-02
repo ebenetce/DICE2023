@@ -1,4 +1,4 @@
-function prob = diceFunc(np, params, nvp)
+function [prob, fixedControls] = diceFunc(np, params, nvp)
 
 arguments
     np (1,1) double {mustBeInteger, mustBePositive}
@@ -9,6 +9,11 @@ arguments
     nvp.TempUpperConstraint (1,1) double = 20;
     nvp.TempLowerConstraint (1,1) double = 0.5;
 end
+
+fixedControls = struct( ...
+    'MIU', nvp.MIU, ...
+    'S', nvp.S, ...
+    'alpha', nvp.Alpha);
 
 %% VARIABLES
 % Control variables

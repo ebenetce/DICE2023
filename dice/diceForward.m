@@ -3,7 +3,7 @@ function [C, CCATOT, K, I, F_GHGabate, RES0, RES1, RES2, RES3, TBOX1, TBOX2, MAT
     tau0, tau1, tau2, tau3, gama)
 
 % Define equations
-CCATOT = CCATOT + ((sigma(i-1)*(eco2Param(i-1)*(K^gama)) + eland(i-1))*(1-MIU(i-1)))*5/3.666;
+CCATOT = CCATOT + ((sigma(i-1)*(eco2Param(i-1)*(K^gama)) + eland(i-1))*(1-MIU(i-1)))*tstep/3.666;
 
 K = (1-dk)^tstep*K + (tstep)*I;
 

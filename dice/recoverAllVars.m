@@ -1,8 +1,14 @@
-function allVars = recoverAllVars(sol, params)
+function allVars = recoverAllVars(sol, params, nvp)
 
-MIU = sol.MIU;
-S = sol.S;
-alpha = sol.alpha;
+arguments
+    sol (1,1) struct
+    params (1,1) struct
+    nvp.FixedControls (1,1) struct = struct()
+end
+ 
+MIU = getControl(sol, nvp.FixedControls, 'MIU');
+S = getControl(sol, nvp.FixedControls, 'S');
+alpha = getControl(sol, nvp.FixedControls, 'alpha');
 
 np = numel(MIU);
 
@@ -55,7 +61,8 @@ gama = params.gama;
 pbacktime = params.pbacktime;
 SRF = params.SRF;
 
-years = 2020 + (params.tstep:params.tstep:params.tstep*np)';
+% The first state is calibrated for yr0, not one period after yr0.
+years = params.yr0 + (0:np-1)'*params.tstep;
 
 CCATOT = zeros(np,1); CCATOT(1) = params.CumEmiss0;
 K = zeros(np,1); K(1) = params.k0;
@@ -87,7 +94,7 @@ C = zeros(np,1);
 C(1,1) = Y(1) - I(1);
 
 for i = 2 : np
-    CCATOT(i) = CCATOT(i-1) + ((sigma(i-1)*(eco2Param(i-1)*(K(i-1)^gama)) + eland(i-1))*(1-MIU(i-1)))*5/3.666;
+    CCATOT(i) = CCATOT(i-1) + ((sigma(i-1)*(eco2Param(i-1)*(K(i-1)^gama)) + eland(i-1))*(1-MIU(i-1)))*tstep/3.666;
 
     K(i) = (1-dk)^tstep*K(i-1) + tstep*I(i-1);
 
@@ -134,9 +141,9 @@ CPRICE  = pbacktime.*(MIU.^(expcost2-1));         % Carbon price equation from a
 RFACTLONG = SRF.*ones(np,1);
 RFACTLONG(2:end) = SRF*(CPC(2:end)/CPC(1)).^(-elasmu).*RR(2:end); % Long interest factor
 RLONG = zeros(np,1);
-RLONG(2:end) = -log(RFACTLONG(2:end)/SRF)./(5*(1:np-1)');           % Long-run interest rate equation
+RLONG(2:end) = -log(RFACTLONG(2:end)/SRF)./(tstep*(1:np-1)');       % Long-run interest rate equation
 RSHORT = zeros(np,1);
-RSHORT(2:end) = -log(RFACTLONG(2:end)./RFACTLONG(1:end-1))/5;     % Short-run interest rate equation
+RSHORT(2:end) = -log(RFACTLONG(2:end)./RFACTLONG(1:end-1))/tstep; % Short-run interest rate equation
 
 FORC =  fco22x*log(MAT/mateq)/log(2)+F_Misc+F_GHGabate;   % Radiative forcing equation
 ECO2 = (sigma.*(eco2Param.*(K.^gama)) + eland).*(1-MIU);  % CO2 Emissions equation
@@ -224,5 +231,19 @@ allVars = table(years, MAT, TATM, FORC, F_Misc, ...
 
 [~,idx]=sort(upper(allVars.Properties.VariableNames));
 allVars = allVars(:,idx);
+
+end
+
+function value = getControl(sol, fixedControls, controlName)
+
+if isfield(sol, controlName)
+    value = sol.(controlName);
+elseif isfield(fixedControls, controlName) && ~isempty(fixedControls.(controlName))
+    value = fixedControls.(controlName);
+else
+    error('DICE2023:MissingControl', ...
+        'The solution does not contain the required %s control. Supply it through FixedControls.', ...
+        controlName);
+end
 
 end
