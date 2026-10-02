@@ -1,4 +1,12 @@
 function allVars = recoverAllVars(sol, params, nvp)
+%recoverAllVars - Calculate DICE variables from a solution
+%   ALLVARS = recoverAllVars(SOL,PARAMS) calculates model trajectories
+%   from optimized DICE control variables.
+%
+%   ALLVARS = recoverAllVars(...,FixedControls=CONTROLS) also supplies
+%   controls that are fixed outside SOL.
+%
+%   Copyright 2024-2026 The MathWorks, Inc.
 
 arguments
     sol (1,1) struct

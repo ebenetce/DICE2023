@@ -1,6 +1,11 @@
 function [C, CCATOT, K, I, F_GHGabate, RES0, RES1, RES2, RES3, TBOX1, TBOX2, MAT, TATM] = diceForward(i, MIU, S, alpha, CCATOT, K, I, F_GHGabate, RES0, RES1, RES2, RES3, TBOX1, TBOX2, ...
     sigma, eco2Param, eland, mateq, fco22x, F_Misc, Fcoef1, Fcoef2, CO2E_GHGabateB, d1, d2, dk, a1, a2base, a3, cost1tot, expcost2, teq1, teq2, tstep, emshare0, emshare1, emshare2, emshare3, ...
     tau0, tau1, tau2, tau3, gama)
+%diceForward - Advance the DICE model by one time period
+%   [C,CCATOT,...,TATM] = diceForward(...) updates model states and
+%   consumption for period I.
+%
+%   Copyright 2024-2026 The MathWorks, Inc.
 
 % Define equations
 CCATOT = CCATOT + ((sigma(i-1)*(eco2Param(i-1)*(K^gama)) + eland(i-1))*(1-MIU(i-1)))*tstep/3.666;

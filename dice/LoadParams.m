@@ -1,9 +1,11 @@
 function params = LoadParams(np, params)
-% LOADPARAMS Load Dice parameters. The function accepts the number of
-% periods and it allows overriding any of the parameters, including the
-% number of years in each period.
+%LoadParams - Create DICE-2023 model parameters
+%   PARAMS = LoadParams(NP) creates parameters for a DICE model with NP
+%   periods.
 %
-% params = LoadParams(81, a2base = .01);
+%   PARAMS = LoadParams(NP,Name=VALUE) also overrides a parameter.
+%
+%   Copyright 2024-2026 The MathWorks, Inc.
 
 %% Parameters
 arguments

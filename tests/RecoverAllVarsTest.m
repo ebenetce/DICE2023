@@ -1,4 +1,8 @@
 classdef RecoverAllVarsTest < matlab.unittest.TestCase
+    %RecoverAllVarsTest - Test DICE variable recovery
+    %   RecoverAllVarsTest verifies recovery with fixed control variables.
+    %
+    %   Copyright 2024-2026 The MathWorks, Inc.
 
     methods (TestClassSetup)
         function addSourcePath(testCase)

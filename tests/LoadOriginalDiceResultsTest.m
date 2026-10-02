@@ -1,4 +1,9 @@
 classdef LoadOriginalDiceResultsTest < matlab.unittest.TestCase
+    %LoadOriginalDiceResultsTest - Test published benchmark result loading
+    %   LoadOriginalDiceResultsTest verifies the published GAMS scenarios
+    %   are available with their expected dimensions.
+    %
+    %   Copyright 2024-2026 The MathWorks, Inc.
 
     methods (TestClassSetup)
         function addSourcePath(testCase)

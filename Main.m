@@ -1,5 +1,7 @@
 %[text] %[text:anchor:T_3ef5] # Running DICE
-%[text:tableOfContents]{"heading":"**Table of Contents**"}
+%[text] MATLAB implementation of the DICE-2023 integrated assessment model described by [Barrage and Nordhaus (2024)](https://doi.org/10.1073/pnas.2312030121)
+%[text] Copyright 2024-2026 The MathWorks, Inc.
+%[text:tableOfContents]{"heading":"Table of Contents"}
 %[text] %[text:anchor:H_5168] ## GAMS results
 %[text] Load GAMS results for further comparison:
 clear

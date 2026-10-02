@@ -1,4 +1,9 @@
 function [RES0, RES1, RES2, RES3, TBOX1, TBOX2, CCATOT, F_GHGabate, K, I, C] = getInitialState(params, S, MIU)
+%getInitialState - Calculate the initial DICE model state
+%   [RES0,...,C] = getInitialState(PARAMS,S,MIU) calculates the initial
+%   climate, carbon, capital, investment, and consumption states.
+%
+%   Copyright 2024-2026 The MathWorks, Inc.
 
 RES0 = params.res00;
 RES1 = params.res10;

@@ -1,4 +1,9 @@
 classdef DiceTrajectoryTest < matlab.unittest.TestCase
+    %DiceTrajectoryTest - Test DICE trajectory calculation
+    %   DiceTrajectoryTest verifies finite trajectories and expected output
+    %   sizes for DICE control variables.
+    %
+    %   Copyright 2024-2026 The MathWorks, Inc.
 
     methods (TestClassSetup)
         function addSourcePath(testCase)

@@ -1,4 +1,9 @@
 function [UTILITY, C, K] = diceTrajectory(params, np, MIU, S, alpha)
+%diceTrajectory - Calculate a DICE trajectory from control variables
+%   [UTILITY,C,K] = diceTrajectory(PARAMS,NP,MIU,S,alpha) calculates the
+%   utility, consumption, and capital trajectories.
+%
+%   Copyright 2024-2026 The MathWorks, Inc.
 
 % Unpack params
 sigma = params.sigma;

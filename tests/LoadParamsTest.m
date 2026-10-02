@@ -1,4 +1,8 @@
 classdef LoadParamsTest < matlab.unittest.TestCase
+    %LoadParamsTest - Test DICE parameter generation
+    %   LoadParamsTest verifies default and annual parameter calibrations.
+    %
+    %   Copyright 2024-2026 The MathWorks, Inc.
 
     methods (TestClassSetup)
         function addSourcePath(testCase)

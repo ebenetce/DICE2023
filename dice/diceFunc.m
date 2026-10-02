@@ -1,4 +1,9 @@
 function [prob, fixedControls] = diceFunc(np, params, nvp)
+%diceFunc - Create a DICE optimization problem
+%   [PROB,fixedControls] = diceFunc(NP,PARAMS) creates a DICE problem with
+%   NP periods using PARAMS.
+%
+%   Copyright 2024-2026 The MathWorks, Inc.
 
 arguments
     np (1,1) double {mustBeInteger, mustBePositive}

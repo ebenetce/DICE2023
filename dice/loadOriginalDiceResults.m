@@ -1,5 +1,9 @@
 function results = loadOriginalDiceResults()
-%LOADORIGINALDICERESULTS Load or recreate the published DICE-2023 GAMS results.
+    %loadOriginalDiceResults - Load published DICE-2023 GAMS results
+    %   RESULTS = loadOriginalDiceResults() loads the local benchmark or
+    %   recreates it from the published DICE-2023 workbook.
+    %
+    %   Copyright 2024-2026 The MathWorks, Inc.
 
     projectFolder = fileparts(fileparts(mfilename("fullpath")));
     resultsPath = fullfile(projectFolder, "GAMSresults.mat");
