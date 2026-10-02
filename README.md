@@ -4,13 +4,18 @@
 
 MATLAB&reg; implementation of the DICE-2023 integrated assessment model described by [Barrage and Nordhaus (2024)](https://doi.org/10.1073/pnas.2312030121).
 
-The published DICE model, GAMS implementation, documentation, and supporting files are available from [DICE Model](https://www.dicemodel.org/).
+The published DICE model, documentation, and supporting files are available from [DICE Model](https://www.dicemodel.org/).
+
+## Requirements
+
+- MATLAB&reg;
+- Optimization Toolbox&trade;
+- (Optional) Parallel Computing Toolbox&trade;
+
 
 ## Run the model
 
 Open the project, then create and solve the default 81-period DICE problem:
-
-Requirements: MATLAB&reg; and Optimization Toolbox&trade;. Parallel Computing Toolbox&trade; is optional.
 
 ```matlab
 openProject("DICE2023.prj")
