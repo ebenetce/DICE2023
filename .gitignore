@@ -31,3 +31,5 @@ codegen/
 
 # Cloud based storage dotfile
 .MATLABDriveTag
+
+GAMSresults.mat

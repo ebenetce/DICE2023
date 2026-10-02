@@ -5,7 +5,7 @@
 clear
 %[text] The DICE IAM model is essentially controlled by three variables: $\\mu$, $S$, and $\\alpha$. Every other variable can be derived or calculated as a function of those three. Hence, there are two ways of solving DICE: solving for these three control variables, or providing one or more of them as a control value. 
 %[text] As a benchmark, load the published GAMS results:
-originalResults = loadOriginalResults;
+originalResults = loadOriginalDiceResults;
 tb = originalResults.tb;
 paris = originalResults.paris;
 altdam = originalResults.altdam;

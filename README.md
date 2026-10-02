@@ -52,6 +52,6 @@ allVars = recoverAllVars(sol, params);
 
 ## Published benchmark results
 
-`loadOriginalResults` loads the local `GAMSresults.mat` benchmark file. If the file is absent, it downloads the [published DICE-2023 Excel workbook](https://www.dicemodel.org/_files/ugd/66d8d1_bff32c2165564c7c94a2f54bbe03cc6f.xlsx?dn=DICE2023-Excel-b-4-3-10-v18.3.xlsx), recreates `GAMSresults.mat`, and returns the six GAMS scenarios used by the examples.
+`loadOriginalDiceResults` loads the local `GAMSresults.mat` benchmark file. If the file is absent, it downloads the [published DICE-2023 Excel workbook](https://www.dicemodel.org/_files/ugd/66d8d1_bff32c2165564c7c94a2f54bbe03cc6f.xlsx?dn=DICE2023-Excel-b-4-3-10-v18.3.xlsx), recreates `GAMSresults.mat`, and returns the six GAMS scenarios used by the examples.
 
 For questions, contact ebenetce@mathworks.com.
